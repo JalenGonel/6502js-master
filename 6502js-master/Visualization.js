@@ -6,6 +6,7 @@ function createGrid(x,y,z,vissString) {
 
   $("#container").height((z/x)*y);
   $("#container").width(z);
+  var stringArrayIndex = 0;
   var col = 0;
     while (col<x) {
       col++;
@@ -22,12 +23,19 @@ function createGrid(x,y,z,vissString) {
   $(".grid").height((z/x));
 };
 
+
+//returns array with raw values to use for creating a visualization
 memoryLocationState(visString){
+
+    var visStringArr = visString.split(" ");
+    for(int i = 0;i<visStringArr.length,i++){
+        if(visStringArr[i].length>2 || (visStringArr.indexOf("\n") > -1)){
+            visStringArr.splice(i,1);
+            
+        }
+    }
     
-    //
-    
-    
-    return new Array[];
+    return new visStringArr;
 }
 
 
