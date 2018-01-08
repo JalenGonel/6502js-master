@@ -8,7 +8,7 @@
 *  Released under the GNU General Public License
 *  see http://gnu.org/licenses/gpl.html
 */
-var visString; //my code
+var visString = ""; //my code
 
 function SimulatorWidget(node) {
   var $node = $(node);
@@ -18,7 +18,6 @@ function SimulatorWidget(node) {
   var labels = Labels();
   var simulator = Simulator();
   var assembler = Assembler();
-    
 
   function initialize() {
     stripText();
@@ -255,8 +254,6 @@ function SimulatorWidget(node) {
         html += num2hex(memory.get(start + x));
         html += " ";
       }
-      visString = html; //my code
-    
       return html;
     }
 
@@ -1503,10 +1500,10 @@ function SimulatorWidget(node) {
         stop();
         ui.stop();
       } else {
+        
         ui.play();
         codeRunning = true;
         executeId = setInterval(multiExecute, 15);
-        refreshGrid(1,2,3,4);
       }
     }
 
@@ -1560,9 +1557,6 @@ function SimulatorWidget(node) {
         var start = parseInt($node.find('.start').val(), 16);
         var length = parseInt($node.find('.length').val(), 16);
         if (start >= 0 && length > 0) {
-            //my code
-            memory.format(start, length); 
-            //my code
           $node.find('.monitor code').html(memory.format(start, length));
         }
       }
@@ -2491,15 +2485,15 @@ function SimulatorWidget(node) {
 
 
   initialize();
-    
+};
 
-}
+
 
 $(document).ready(function () {
   $('.widget').each(function () {
     SimulatorWidget(this);
       
-    //My Added Code ->
+          //My Added Code ->
     createGrid(16,42,198,"visString"); //not working
 
     $(".grid").click(function() {
@@ -2520,9 +2514,7 @@ $(document).ready(function () {
   });
 });
 
-
 //my code
-
 
 // function that builds a grid in the "container"
 function createGrid(x,y,z,vissString) {
@@ -2561,13 +2553,13 @@ memoryLocationState(visString){
     }
     
     return new visStringArr;
-}
+};
 
 
 // function that clears the grid
 function clearGrid(){
     $(".grid").remove();
-};  
+};
 
 // function that prompts the user to select the number of boxes in a new grid
 // function creates that new grid
@@ -2580,7 +2572,7 @@ function refreshGrid(x,y,z,visString){
 
 function getVisString(visString){
     
-}
+};
 
 
 //my code

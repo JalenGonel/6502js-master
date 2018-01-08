@@ -1,4 +1,4 @@
-
+/*
 // function that builds a grid in the "container"
 function createGrid(x,y,z,vissString) {
 
@@ -57,7 +57,7 @@ function getVisString(visString){
     
 }
 
-
+*/
 
 //Old Code
 /*
