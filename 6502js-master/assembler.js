@@ -2503,15 +2503,19 @@ $(document).ready(function () {
     createGrid(16,42,198,"visString"); //not working
 
     $(".grid").click(function() {
-      $(this).toggleClass('red');
+      $(this).toggleClass("red");
+        //$(this).css("background-color", "red");
+        
     });
   
    $(".grid").mouseover(function() {
-  $(this).toggleClass('blue');      /*$(this).css("background-color", "blue");*/
+  //$(this).toggleClass('blue');      
+       $(this).css("background-color", "blue");
         });
   
   $(".grid").mouseout(function() {
-  $(this).toggleClass('default');      /*$(this).css("background-color", "blue");*/
+  //$(this).toggleClass('white');      
+      $(this).css("background-color", "white");
         });
     $(".newGrid").click(function() {
         refreshGrid(x,y,z,visString);

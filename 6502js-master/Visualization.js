@@ -22,12 +22,11 @@ function createGrid(x,y,z,vissString) {
   $(".grid").height((z/x));
 };
 
-memoryLocationState(visString){
+function memoryLocationState(visString){
     
-    //
+        
     
-    
-    return new Array[];
+    //return new Array[];
 }
 
 
