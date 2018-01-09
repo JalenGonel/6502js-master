@@ -2529,7 +2529,8 @@ function createGrid(x,y,z,vissString) {
       col++;
       var row = 0;
         while (row<y) {
-           row++; $("#container").append("<div class='grid'></div>");
+           row++; 
+           $("#container").append("<div class='grid'></div>");
         };
     };
   //Individual Changing Grid
