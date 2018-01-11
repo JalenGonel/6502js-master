@@ -2502,6 +2502,7 @@ $(document).ready(function () {
     SimulatorWidget(this);
       
     //My Added Code ->
+    //(width in # of pixels, height in # of pixels, total amount)
     createGrid(16,42,198,"visString"); //not working
 
     $(".grid").click(function() {

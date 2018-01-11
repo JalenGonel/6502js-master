@@ -19,7 +19,7 @@ function createGrid(x,y,z,vissString) {
    // $(".grid").height(z/y);
   
   $(".grid").width(z/x);
-  $(".grid").height((z/x));
+  $(".grid").height(z/x);
 };
 
 function memoryLocationState(visString){
@@ -46,6 +46,12 @@ function refreshGrid(x,y,z,visString){
 
 function getVisString(visString){
     
+}
+
+function scrollable(){
+    document.getElementById("container").style.overflowY = "scroll";
+    document.getElementById("container").style.height = "100px";
+    document.getElementById("container").style.width = "220px";
 }
 
 
