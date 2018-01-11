@@ -115,6 +115,13 @@ h4 {
   
 }
 
+/*My code from here*/
+
+.scrollable {
+    height: 10px; /* or any value */
+    overflow-y: auto;
+}
+
 .blue {
   background: blue;
 }

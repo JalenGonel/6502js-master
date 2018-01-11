@@ -1560,9 +1560,11 @@ function SimulatorWidget(node) {
         var start = parseInt($node.find('.start').val(), 16);
         var length = parseInt($node.find('.length').val(), 16);
         if (start >= 0 && length > 0) {
+            
             //my code
             memory.format(start, length); 
             //my code
+            
           $node.find('.monitor code').html(memory.format(start, length));
         }
       }
