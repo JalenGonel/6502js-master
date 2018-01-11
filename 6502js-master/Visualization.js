@@ -31,7 +31,6 @@ function createGrid(x,y,z,vissString) {
 
 function memoryLocationState(visString){
     
-        
     
     //return new Array[];
 }
@@ -55,12 +54,35 @@ function getVisString(visString){
     
 }
 
+<<<<<<< Updated upstream
 function scrollable(){
     document.getElementById("container").style.overflowY = "scroll";
     document.getElementById("container").style.height = "100px";
     document.getElementById("container").style.width = "220px";
 }
 
+||||||| merged common ancestors
+=======
+var changeColor = function(){
+    
+}
+
+var myfunc = function(){
+    alert(this.name);
+     $(this).css("background-color", "red");
+};
+
+var obj_a = {
+    name:  "FOO"
+};
+
+var obj_b = {
+    name:  "BAR!!"
+};
+Now you can call:
+
+myfunc.call(obj_a);
+>>>>>>> Stashed changes
 
 
 //Old Code
