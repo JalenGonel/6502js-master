@@ -1,6 +1,13 @@
 
 // function that builds a grid in the "container"
+var width;
+var length;
+var pixelSize;
+
 function createGrid(x,y,z,vissString) {
+    width = x;
+    length = y;
+    pixelSize = z;
 
   var stringArray = memoryLocationState(visString);
 
