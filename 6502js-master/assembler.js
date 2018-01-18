@@ -28,7 +28,8 @@ function SimulatorWidget(node) {
 
     $node.find('.assembleButton').click(function () {
       assembler.assembleCode();
-    });
+    } );
+    $node.find('.assembleButton').click(assembler.disassemble);
     $node.find('.runButton').click(simulator.runBinary);
     $node.find('.runButton').click(simulator.stopDebugger);
     $node.find('.resetButton').click(simulator.reset);
@@ -1564,8 +1565,10 @@ function SimulatorWidget(node) {
             //my code
             memory.format(start, length); 
             //my code
+          
+        
+          $node.find('.monitor code').html(monitorArray(memory.format(start, length)));
             
-          $node.find('.monitor code').html(memory.format(start, length));
         }
       }
     }
@@ -2280,8 +2283,9 @@ function SimulatorWidget(node) {
     }
 
     function openPopup(content, title) {
+        
       var w = window.open('', title, 'width=500,height=300,resizable=yes,scrollbars=yes,toolbar=no,location=no,menubar=no,status=no');
-
+         
       var html = "<html><head>";
       html += "<link href='style.css' rel='stylesheet' type='text/css' />";
       html += "<title>" + title + "</title></head><body>";
@@ -2292,6 +2296,7 @@ function SimulatorWidget(node) {
       html += "</code></pre></body></html>";
       w.document.write(html);
       w.document.close();
+      
     }
 
     // hexDump() - Dump binary as hex to new window
@@ -2460,7 +2465,10 @@ function SimulatorWidget(node) {
       var html = 'Address  Hexdump   Dissassembly\n';
       html +=    '-------------------------------\n';
       html += instructions.join('\n');
-      openPopup(html, 'Disassembly');
+      
+      $node.find('.disassembly code').html(html);
+      //openPopup(html, 'Disassembly');
+      
     }
 
     return {
@@ -2495,6 +2503,18 @@ function SimulatorWidget(node) {
   initialize();
     
 
+}
+
+function monitorArray(stringValue){
+    var arr = stringValue.split(" ");
+    var stringThing = "";
+    for(i = 1; i< arr.length; i++){
+        if(arr[i].length<=2){
+          stringThing += arr[i];
+          stringThing += "\n";  
+        }  
+    }
+    return stringThing;
 }
 
 $(document).ready(function () {
