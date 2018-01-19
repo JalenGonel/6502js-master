@@ -49,7 +49,7 @@ function SimulatorWidget(node) {
       ui.toggleMonitor();
       simulator.toggleMonitor();
     });
-    $node.find('.stepButton').click(simulator.debugExec);
+    $node.find('.stepButton').click(simulator.debugExec); 
     $node.find('.gotoButton').click(simulator.gotoAddr);
     $node.find('.notesButton').click(ui.showNotes);
     $node.find('.code').keypress(simulator.stop);
@@ -1584,6 +1584,8 @@ function SimulatorWidget(node) {
     function updateDebugInfo() {
       var html = "A=$" + num2hex(regA) + " X=$" + num2hex(regX) + " Y=$" + num2hex(regY) + "<br />";
       html += "SP=$" + num2hex(regSP) + " PC=$" + addr2hex(regPC);
+      stackPointer = num2hex(regSP);
+      //updateStack();
       html += "<br />";
       html += "NV-BDIZC<br />";
       for (var i = 7; i >=0; i--) {
@@ -2508,10 +2510,28 @@ function SimulatorWidget(node) {
 
 //Global Vars
 var stackString; //keeps track of current stack
-
+var lastStackString;
+var changedValues;
+var stackPointer;
 
 //my code
 var visString; 
+
+//Regex Example
+
+//s.replace(r, '<b>$1</b>');
+
+//RegexExample
+
+
+//updates the information in the stack
+function updateStack(stringValue){
+    console.log("Stack Pointer:" + stackPointer);
+    
+    
+    stringValue.replace(r, '<b>$1</b>');
+    return stringValue;
+}
 
 //Create stack values
 function monitorArray(stringValue){
@@ -2524,14 +2544,24 @@ function monitorArray(stringValue){
             arr.splice(i,1);
     }
     
-    
     //for each memory location
-    for(i = 1; i< arr.length; i++){
-        if(arr[i].length<=2){
+    for(i = 0; i< arr.length; i++){
+        if(arr[i].length>1){
             
             //Add it all together
             
-            var temp = hexVal + ": " + arr[i-1] + "\n";
+            //var temp = hexVal + ": " + arr[i-1] + "\n";
+            var temp = "";
+            
+            //gray out zeroes
+            if(arr[i] === "00"){
+                temp += (hexVal + ": " + "<span id=\"emptyStackSlots\">" + arr[i] + "</span>" + "\n");
+            } 
+            //let it shine
+            else {
+                temp += (hexVal + ": " + "<span id=\"fullStackSlots\">" + arr[i] + "</span>" + "\n");
+            }
+            
             /*
             stringThing += arr[i];
             stringThing += "\n";
@@ -2552,11 +2582,6 @@ function incrementHexValue(hexVal){
     var tempHex = parseInt(hexVal, 16);
     tempHex += 1;
     return tempHex.toString(16);
-}
-
-//updates the information in the stack
-function updateStack(){
-    
 }
 
 
