@@ -8,7 +8,7 @@
 *  Released under the GNU General Public License
 *  see http://gnu.org/licenses/gpl.html
 */
-var visString; //my code
+
 
 function SimulatorWidget(node) {
   var $node = $(node);
@@ -2505,17 +2505,60 @@ function SimulatorWidget(node) {
 
 }
 
+
+//Global Vars
+var stackString; //keeps track of current stack
+
+
+//my code
+var visString; 
+
+//Create stack values
 function monitorArray(stringValue){
-    var arr = stringValue.split(" ");
+    var arr = stringValue.split(" "); //split single string into array elements separated by spaced
     var stringThing = "";
+    var hexVal = arr[0].slice(0,4);
+    
+    for(i = 0; i<arr.length;i++){
+        if(arr[i].length>2)
+            arr.splice(i,1);
+    }
+    
+    
+    //for each memory location
     for(i = 1; i< arr.length; i++){
         if(arr[i].length<=2){
-          stringThing += arr[i];
-          stringThing += "\n";  
+            
+            //Add it all together
+            
+            var temp = hexVal + ": " + arr[i-1] + "\n";
+            /*
+            stringThing += arr[i];
+            stringThing += "\n";
+            */
+            stringThing += temp;
+            //increment hex value for next time
+     
         }  
+        hexVal = incrementHexValue(hexVal);
     }
+    stackString = stringThing;
     return stringThing;
 }
+
+//increments hex value for monitor array
+function incrementHexValue(hexVal){
+    //converts to decimal, increments, converts back to hex, returns
+    var tempHex = parseInt(hexVal, 16);
+    tempHex += 1;
+    return tempHex.toString(16);
+}
+
+//updates the information in the stack
+function updateStack(){
+    
+}
+
 
 $(document).ready(function () {
   $('.widget').each(function () {
