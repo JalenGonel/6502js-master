@@ -1566,8 +1566,14 @@ function SimulatorWidget(node) {
             memory.format(start, length); 
             //my code
           
-        
+          //update the stack array to print current stack values and highlight given memory locations
+            
           $node.find('.monitor code').html(monitorArray(memory.format(start, length)));
+          
+          //after updating the stack array, update it again to highlight the stack pointer location
+          updateStack();    
+          
+          console.log("updateMonitor");
             
         }
       }
@@ -1586,9 +1592,15 @@ function SimulatorWidget(node) {
       html += "SP=$" + num2hex(regSP) + " PC=$" + addr2hex(regPC);
         
       //call function to update stack and disassembled code
-      update_StackAndDissassembled(num2hex(regSP),addr2hex(regPC));
+      updateDissassembled(addr2hex(regPC));
         
-      console.log("SP: " + stackPointer + "| PC: " + programCounter);
+      //set temporary stack value  
+      tempStackPointer = num2hex(regSP);
+        
+      //console.log("SP: " + num2hex(regSP) + "| stackPointer: " + stackPointer);
+      
+          
+        
       html += "<br />";
       html += "NV-BDIZC<br />";
       for (var i = 7; i >=0; i--) {
@@ -2520,30 +2532,129 @@ function SimulatorWidget(node) {
 //Global Vars
 var programCounter; //current val of Program Counter
 var stackPointer; //current val of Stack Counter
-var lastStackLocationChanged; //value of last stack pointer changed
-var programCounterArr; //array to keep track of program counter
+var lastStackPointer; //value of last stack pointer changed
+var tempStackPointer; //value of stack pointer at time its updated
+var stackPointerArr = []; //array of all stack locations
+var newestVal;
 
-function update_StackAndDissassembled(pC, stack){
+// Updates disassembled output to highlight current program counter location
+function updateDissassembled(pC){
+    //console.log(" programCounter: " + programCounter + " pC: " + pC);
     
     //if this is the first time this function is being called
-    if(programCounter == null || stackPointer == null){
+    if(programCounter == null){
         programCounter = pC;
-        stackPointer = stack;
-        console.log("updateStackAndDis");
         return;
     } 
     
+    /* For Disassembled Code
+     * Highlight line that matches program counter value
+     * Keep every other value normal
+    */
+    var pcl = "programCounterLocation"; 
     
-    /* For Stack
+    //remove class name if possible
+    if(document.getElementById(programCounter) != null){
+        var lastDisLoc = document.getElementById(programCounter);
+        if(lastDisLoc.classList.contains(pcl)){
+            lastDisLoc.classList.remove(pcl);
+        }
+    }
+    
+    //add class name if possible
+    if(document.getElementById(pC)!=null){
+        var disLoc = document.getElementById(pC);
+        disLoc.className += pcl;
+    }
+    
+    
+    
+    //update variables
+    programCounter = pC;
+}
+
+
+// function to update stack
+// had to be separate function from program counter because of method order execution
+function updateStack(){
+        /* For Stack
     * Highlight the newest changed value (Point to memory location that SP is = to)
     * Change the previously newly changed value to same color as any other element != 0
     * Highlight in a different color values that have been altered 
     */
     
+    //No temporary stack pointer means no values can be updated
+    if(tempStackPointer == null)
+        return;
+    
     /*
-     * Highlight line that matches program counter value
-     * Keep every other value normal
+    LOOPS TO HIGHLIGHT CURRENT STACK LOCATION
+    */ 
+    
+    //remove class name if possible
+    var spl = " stackPointerLocation";
+    if(document.getElementById(stackPointer) != null || typeof tempStackPointer == 'undefined'){
+        var lastStackLoc = document.getElementById(stackPointer);
+        if(lastStackLoc.classList.contains(spl)){
+            lastStackLoc.classList.remove(spl);
+        }
+        //console.log("Remove classname");
+    }
+    
+    //add class name if possible
+    if(document.getElementById(tempStackPointer) != null|| typeof tempStackPointer == 'undefined'){
+        var stacLoc = document.getElementById(tempStackPointer);  
+        
+        var k = stacLoc.getAttribute("id");
+        var l = stackPointerArr.indexOf(k);
+        var count = 0;
+        for(var i = 0; i < stackPointerArr.length; ++i){
+            if(stackPointerArr[i] == (k))
+                count++;
+        }
+        
+        if(count == 0){
+            stackPointerArr.push(k);
+        } else if(count == 1){
+            
+            if(stackPointerArr.length > 0){
+                stackPointerArr.pop();
+            } else{
+                stackPointerArr.push(k);
+            }
+        }
+        stacLoc.className += spl;
+        console.log(stackPointerArr);
+        //console.log("Adding classname");
+    }
+    
+    /*
+    LOOPS TO HIGHLIGHT LAST CHANGED VALUE
     */
+    //remove class name if possible
+    
+    //console.log(" lastStackPointer: " + lastStackPointer + " stackPointer: " + stackPointer);
+    
+    if(lastStackPointer){
+    var lspl = " lastStackPointerLocation";
+        if(document.getElementById(lastStackPointer) != null){
+            var lastStackLoc = document.getElementById(lastStackPointer);
+            if(lastStackLoc.classList.contains(lspl)){
+                lastStackLoc.classList.remove(lspl);
+            }
+            //console.log("Remove classname");
+        }
+
+        //add class name if possible
+        if(document.getElementById(lastStackPointer) != null){
+            var stacLoc = document.getElementById(lastStackPointer);
+            stacLoc.className += lspl;
+            //console.log("Adding classname");
+        }
+
+    }
+    
+    stackPointer = tempStackPointer;
 }
 
 //Create stack values
@@ -2552,6 +2663,7 @@ function monitorArray(stringValue){
     var stackString = "";
     var hexVal = arr[0].slice(0,4);
     
+    
     for(i = 0; i<arr.length;i++){
         if(arr[i].length>2)
             arr.splice(i,1);
@@ -2559,6 +2671,7 @@ function monitorArray(stringValue){
     
     //for each memory location
     for(i = 0; i< arr.length; i++){
+        
         if(arr[i].length>1){
             
             //Add it all together
@@ -2569,16 +2682,16 @@ function monitorArray(stringValue){
             //string that sets the specific span IDs and class for each stack element
             var spanTagEmpty = "<span" + " class= " + "'EmptyStackSlots'"  + "id= " + hexVal.slice(-2)+ ">";    
             var spanTagFilled = "<span " + " class= " + "'FilledStackSlots'" + "id= " + hexVal.slice(-2)  + ">";
-            var spanTag
+            
             var spanTagEnd = "</span>";
             
-            //gray out zeroes
+            //gray out when value is unchanged
             if(arr[i] === "00"){
                 temp += (spanTagEmpty + hexVal + ": " + arr[i] + "</span>" + "\n");
             } 
             
             //let it shine
-            else {
+            else {              
                 temp += (spanTagFilled + hexVal + ": " + arr[i] + spanTagEnd + "\n");
             }
             
@@ -2611,7 +2724,7 @@ $(document).ready(function () {
       
     //My Added Code ->
     //(width in # of pixels, height in # of pixels, total amount)
-    createGrid(16,42,198,"visString"); //not working
+    /*createGrid(16,42,198,"visString"); //not working*/
 
     $(".grid").click(function() {
       $(this).toggleClass("red");

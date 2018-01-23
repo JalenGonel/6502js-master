@@ -77,9 +77,9 @@ var obj_a = {
 var obj_b = {
     name:  "BAR!!"
 };
-Now you can call:
+//Now you can call:
 
-myfunc.call(obj_a);
+/*myfunc.call(obj_a);*/
 
 
 //Old Code

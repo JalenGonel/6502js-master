@@ -210,6 +210,18 @@ textarea {
     color: yellowgreen;
 }
 
+.programCounterLocation{
+    background-color: yellow;
+}
+
+.stackPointerLocation{
+    background-color: yellow;
+}
+
+.lastStackPointerLocation{
+    color: red;
+}
+
 
 /*My extra bits from here*/
 
