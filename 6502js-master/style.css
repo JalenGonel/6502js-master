@@ -142,7 +142,7 @@ textarea {
   grid-column: 2 / 3;
   grid-row: 1;
   /*margin-bottom: 10px;*/
-  padding: 10px;
+  /*padding: 10px;*/    
   
 }
 
@@ -207,7 +207,7 @@ textarea {
 }
 
 .FilledStackSlots{
-    background-color: yellowgreen;
+    color: yellowgreen;
 }
 
 
@@ -218,6 +218,8 @@ textarea {
     overflow-y: auto;
     /*display: none;*/
 }
+
+
 
 .blue {
   background: blue;

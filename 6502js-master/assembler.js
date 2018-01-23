@@ -1584,8 +1584,11 @@ function SimulatorWidget(node) {
     function updateDebugInfo() {
       var html = "A=$" + num2hex(regA) + " X=$" + num2hex(regX) + " Y=$" + num2hex(regY) + "<br />";
       html += "SP=$" + num2hex(regSP) + " PC=$" + addr2hex(regPC);
-      stackPointer = num2hex(regSP);
-      //updateStack();
+        
+      //call function to update stack and disassembled code
+      update_StackAndDissassembled(num2hex(regSP),addr2hex(regPC));
+        
+      console.log("SP: " + stackPointer + "| PC: " + programCounter);
       html += "<br />";
       html += "NV-BDIZC<br />";
       for (var i = 7; i >=0; i--) {
@@ -2515,28 +2518,32 @@ function SimulatorWidget(node) {
 
 
 //Global Vars
-var stackString; //keeps track of current stack
-var lastStackString;
-var changedValues;
-var stackPointer;
+var programCounter; //current val of Program Counter
+var stackPointer; //current val of Stack Counter
+var lastStackLocationChanged; //value of last stack pointer changed
+var programCounterArr; //array to keep track of program counter
 
-//my code
-var visString; 
-
-//Regex Example
-
-//s.replace(r, '<b>$1</b>');
-
-//RegexExample
-
-
-//updates the information in the stack
-function updateStack(stringValue){
-    console.log("Stack Pointer:" + stackPointer);
+function update_StackAndDissassembled(pC, stack){
+    
+    //if this is the first time this function is being called
+    if(programCounter == null || stackPointer == null){
+        programCounter = pC;
+        stackPointer = stack;
+        console.log("updateStackAndDis");
+        return;
+    } 
     
     
-    stringValue.replace(r, '<b>$1</b>');
-    return stringValue;
+    /* For Stack
+    * Highlight the newest changed value (Point to memory location that SP is = to)
+    * Change the previously newly changed value to same color as any other element != 0
+    * Highlight in a different color values that have been altered 
+    */
+    
+    /*
+     * Highlight line that matches program counter value
+     * Keep every other value normal
+    */
 }
 
 //Create stack values
@@ -2560,7 +2567,7 @@ function monitorArray(stringValue){
             var temp = "";
             
             //string that sets the specific span IDs and class for each stack element
-            var spanTagEmpty = "<span" + " class= " + "'EmptyStackSlots'"  + "id= " + hexVal.slice(-2)+ ">";
+            var spanTagEmpty = "<span" + " class= " + "'EmptyStackSlots'"  + "id= " + hexVal.slice(-2)+ ">";    
             var spanTagFilled = "<span " + " class= " + "'FilledStackSlots'" + "id= " + hexVal.slice(-2)  + ">";
             var spanTag
             var spanTagEnd = "</span>";
