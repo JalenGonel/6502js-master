@@ -2429,8 +2429,14 @@ function SimulatorWidget(node) {
         toString: function () {
           var bytesString = bytes.map(num2hex).join(' ');
           var padding = Array(11 - bytesString.length).join(' ');
-          return '$' + addr2hex(address) + '    ' + bytesString + padding + opCode +
-            ' ' + formatArguments(args);
+            
+          var address2Hex = addr2hex(address);
+            
+          var spanAddr = "<span id=" + address2Hex + ">";
+          var spanAddrEnd = "</span>";
+            
+          return spanAddr + '$' + addr2hex(address) + '    ' + bytesString + padding + opCode +
+            ' ' + formatArguments(args) + spanAddrEnd;
         }
       };
     }
@@ -2536,7 +2542,7 @@ function updateStack(stringValue){
 //Create stack values
 function monitorArray(stringValue){
     var arr = stringValue.split(" "); //split single string into array elements separated by spaced
-    var stringThing = "";
+    var stackString = "";
     var hexVal = arr[0].slice(0,4);
     
     for(i = 0; i<arr.length;i++){
@@ -2553,27 +2559,34 @@ function monitorArray(stringValue){
             //var temp = hexVal + ": " + arr[i-1] + "\n";
             var temp = "";
             
+            //string that sets the specific span IDs and class for each stack element
+            var spanTagEmpty = "<span" + " class= " + "'EmptyStackSlots'"  + "id= " + hexVal.slice(-2)+ ">";
+            var spanTagFilled = "<span " + " class= " + "'FilledStackSlots'" + "id= " + hexVal.slice(-2)  + ">";
+            var spanTag
+            var spanTagEnd = "</span>";
+            
             //gray out zeroes
             if(arr[i] === "00"){
-                temp += (hexVal + ": " + "<span id=\"emptyStackSlots\">" + arr[i] + "</span>" + "\n");
+                temp += (spanTagEmpty + hexVal + ": " + arr[i] + "</span>" + "\n");
             } 
+            
             //let it shine
             else {
-                temp += (hexVal + ": " + "<span id=\"fullStackSlots\">" + arr[i] + "</span>" + "\n");
+                temp += (spanTagFilled + hexVal + ": " + arr[i] + spanTagEnd + "\n");
             }
             
             /*
-            stringThing += arr[i];
-            stringThing += "\n";
+            stackString += arr[i];
+            stackString += "\n";
             */
-            stringThing += temp;
+            stackString += temp;
             //increment hex value for next time
      
         }  
         hexVal = incrementHexValue(hexVal);
     }
-    stackString = stringThing;
-    return stringThing;
+    stackString = stackString;
+    return stackString;
 }
 
 //increments hex value for monitor array
