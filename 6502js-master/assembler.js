@@ -2595,8 +2595,8 @@ function updateStack(){
     var spl = " stackPointerLocation";
     if(document.getElementById(stackPointer) != null || typeof tempStackPointer == 'undefined'){
         var lastStackLoc = document.getElementById(stackPointer);
-        fixArray(lastStackLoc.getAttribute("id"));
-        //console.log(stackPointerArr);
+        fixArray(lastStackLoc);
+        console.log(stackPointerArr);
         if(lastStackLoc.classList.contains(spl)){
             lastStackLoc.classList.remove(spl);
         }
@@ -2643,15 +2643,22 @@ function updateStack(){
 
 
 //Function that edits StackPointerArr array given that the emulator updates debug variables twice per step
-function fixArray(stacLocation){
+function fixArray(stackLocation){
+    
+    var stacLocation = stackLocation.getAttribute("id");
+    var val = stackLocation.innerHTML.slice(-2);
+    
+    //if there's repeats, cut them out
     if(stackPointerArr.length>0){
-        if(stackPointerArr[stackPointerArr.length-1] == stacLocation){
-            console.log(stackPointerArr);
+        console.log(stackPointerArr[stackPointerArr.length-1].k);
+        if(stackPointerArr[stackPointerArr.length-1].k == stacLocation){
             stackPointerArr.pop();
         }
-        stackPointerArr.push(stacLocation);
-    }else{
-        stackPointerArr.push(stacLocation);
+        stackPointerArr.push({k: stacLocation, v: val});
+        
+    } else {
+        //add first element
+        stackPointerArr.push({k: stacLocation, v: val});
         
     }
 }
