@@ -1573,7 +1573,6 @@ function SimulatorWidget(node) {
           //after updating the stack array, update it again to highlight the stack pointer location
           updateStack();    
           
-          console.log("updateMonitor");
             
         }
       }
@@ -1655,6 +1654,7 @@ function SimulatorWidget(node) {
       regPC = 0x600;
       regSP = 0xff;
       regP = 0x30;
+      stackPointerArr = [];//deletes previous stackpointer values
       updateDebugInfo();
     }
 
@@ -2595,6 +2595,8 @@ function updateStack(){
     var spl = " stackPointerLocation";
     if(document.getElementById(stackPointer) != null || typeof tempStackPointer == 'undefined'){
         var lastStackLoc = document.getElementById(stackPointer);
+        fixArray(lastStackLoc.getAttribute("id"));
+        //console.log(stackPointerArr);
         if(lastStackLoc.classList.contains(spl)){
             lastStackLoc.classList.remove(spl);
         }
@@ -2604,28 +2606,9 @@ function updateStack(){
     //add class name if possible
     if(document.getElementById(tempStackPointer) != null|| typeof tempStackPointer == 'undefined'){
         var stacLoc = document.getElementById(tempStackPointer);  
-        
         var k = stacLoc.getAttribute("id");
-        var l = stackPointerArr.indexOf(k);
-        var count = 0;
-        for(var i = 0; i < stackPointerArr.length; ++i){
-            if(stackPointerArr[i] == (k))
-                count++;
-        }
-        
-        if(count == 0){
-            stackPointerArr.push(k);
-        } else if(count == 1){
-            
-            if(stackPointerArr.length > 0){
-                stackPointerArr.pop();
-            } else{
-                stackPointerArr.push(k);
-            }
-        }
         stacLoc.className += spl;
-        console.log(stackPointerArr);
-        //console.log("Adding classname");
+        
     }
     
     /*
@@ -2643,18 +2626,34 @@ function updateStack(){
                 lastStackLoc.classList.remove(lspl);
             }
             //console.log("Remove classname");
+            
         }
 
-        //add class name if possible
-        if(document.getElementById(lastStackPointer) != null){
-            var stacLoc = document.getElementById(lastStackPointer);
-            stacLoc.className += lspl;
-            //console.log("Adding classname");
-        }
+    //add class name if possible
+    if(document.getElementById(lastStackPointer) != null){
+        var stacLoc = document.getElementById(lastStackPointer);
+        stacLoc.className += lspl;
+        //console.log("Adding classname");
+    }
 
     }
     
     stackPointer = tempStackPointer;
+}
+
+
+//Function that edits StackPointerArr array given that the emulator updates debug variables twice per step
+function fixArray(stacLocation){
+    if(stackPointerArr.length>0){
+        if(stackPointerArr[stackPointerArr.length-1] == stacLocation){
+            console.log(stackPointerArr);
+            stackPointerArr.pop();
+        }
+        stackPointerArr.push(stacLocation);
+    }else{
+        stackPointerArr.push(stacLocation);
+        
+    }
 }
 
 //Create stack values

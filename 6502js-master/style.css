@@ -165,6 +165,7 @@ textarea {
     height: 50%;
     background-color: #ddd;
     overflow: auto;
+    font-family: monospace;
 }
 
 .monitor {
@@ -212,6 +213,7 @@ textarea {
 
 .programCounterLocation{
     background-color: yellow;
+    color: black;
 }
 
 .stackPointerLocation{
@@ -230,8 +232,6 @@ textarea {
     overflow-y: auto;
     /*display: none;*/
 }
-
-
 
 .blue {
   background: blue;
