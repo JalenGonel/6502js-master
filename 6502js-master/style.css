@@ -220,7 +220,7 @@ textarea {
     background-color: yellow;
 }
 
-.lastStackPointerLocation{
+.lastChangedValue{
     color: red;
 }
 
