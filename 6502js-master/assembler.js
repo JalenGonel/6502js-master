@@ -1596,14 +1596,20 @@ function SimulatorWidget(node) {
       //set temporary stack value  
       tempStackPointer = num2hex(regSP);
         
+      //console.log("SP: " + num2hex(regSP) + "| stackPointer: " + stackPointer);
       
-      
-          
+     var tooltips = [ "Carry-Flag", "Zero-Flag", "Interupt-Flag", "Decimal_Mode_Status-Flag", "Software-Interrupt", "1_at_all_times", "Overflow-Flag", "Negative-Flag"];
+        
         
       html += "<br />";
-      html += "NV-BDIZC<br />";
       for (var i = 7; i >=0; i--) {
-        html += regP >> i & 1;
+        if (i==7){
+            html += "<span title= " + tooltips[i] + ">" + (regP >> i & 1) + "</span>";
+        }
+          
+        else{
+            html += "<span title= " + tooltips[i] + "> " + (regP >> i & 1) + "</span>";
+        }
       }
       $node.find('.minidebugger').html(html);
       updateMonitor();
@@ -1654,9 +1660,7 @@ function SimulatorWidget(node) {
       regPC = 0x600;
       regSP = 0xff;
       regP = 0x30;
-      //deletes previous stackpointer values
-      stackPointerArr = [];
-      
+      stackPointerArr = [];//deletes previous stackpointer values
       updateDebugInfo();
     }
 
@@ -2531,27 +2535,17 @@ function SimulatorWidget(node) {
 }
 
 
-/*
-    *   GLOBAL VARIABLES    *
-*/
-
-//current val of Program Counter
-var programCounter;
-//current val of Stack Counter
-var stackPointer; 
-//value of last stack pointer changed
-var lastStackPointer; 
-//value of stack pointer at time its updated
-var tempStackPointer; 
-//array of all stack locations
-var stackPointerArr = []; 
-//array of all unique stack locations
-var u_stackPointerArr = [];
-//newest location of stackPointer
+//Global Vars
+var programCounter; //current val of Program Counter
+var stackPointer; //current val of Stack Counter
+var lastStackPointer; //value of last stack pointer changed
+var tempStackPointer; //value of stack pointer at time its updated
+var stackPointerArr = []; //array of all stack locations
 var newestVal;
 
 // Updates disassembled output to highlight current program counter location
 function updateDissassembled(pC){
+    //console.log(" programCounter: " + programCounter + " pC: " + pC);
     
     //if this is the first time this function is being called
     if(programCounter == null){
@@ -2603,17 +2597,16 @@ function updateStack(){
     LOOPS TO HIGHLIGHT CURRENT STACK LOCATION
     */ 
     
-    var spl = " stackPointerLocation";
-    
     //remove class name if possible
-    //get stackPointer element 
+    var spl = " stackPointerLocation";
     if(document.getElementById(stackPointer) != null || typeof tempStackPointer == 'undefined'){
         var lastStackLoc = document.getElementById(stackPointer);
-        fixArrays(lastStackLoc);
+        fixArray(lastStackLoc.getAttribute("id"));
+        //console.log(stackPointerArr);
         if(lastStackLoc.classList.contains(spl)){
             lastStackLoc.classList.remove(spl);
         }
-        
+        //console.log("Remove classname");
     }
     
     //add class name if possible
@@ -2621,105 +2614,52 @@ function updateStack(){
         var stacLoc = document.getElementById(tempStackPointer);  
         var k = stacLoc.getAttribute("id");
         stacLoc.className += spl;
+        
     }
     
     /*
     LOOPS TO HIGHLIGHT LAST CHANGED VALUE
     */
-    
-      
     //remove class name if possible
     
-    var lcl = " lastChangedValue";
-        if(document.getElementById(newestVal) != null){
-            var lastStackLoc = document.getElementById(newestVal);
-            if(lastStackLoc.classList.contains(lcl)){
-                lastStackLoc.classList.remove(lcl);
-            }  
-    }
+    //console.log(" lastStackPointer: " + lastStackPointer + " stackPointer: " + stackPointer);
+    
+    if(lastStackPointer){
+    var lspl = " lastStackPointerLocation";
+        if(document.getElementById(lastStackPointer) != null){
+            var lastStackLoc = document.getElementById(lastStackPointer);
+            if(lastStackLoc.classList.contains(lspl)){
+                lastStackLoc.classList.remove(lspl);
+            }
+            //console.log("Remove classname");
+            
+        }
 
     //add class name if possible
-    if(document.getElementById(newestVal) != null){
-        var stacLoc = document.getElementById(newestVal);
-        stacLoc.className += lcl;
-        
+    if(document.getElementById(lastStackPointer) != null){
+        var stacLoc = document.getElementById(lastStackPointer);
+        stacLoc.className += lspl;
+        //console.log("Adding classname");
     }
 
+    }
     
-    
-   
     stackPointer = tempStackPointer;
 }
 
 
-//Function that edits StackPointerArr and u_stackPointer Arr array given that the emulator updates debug variables twice per step
-function fixArrays(stackLocation){
-    
-    
-    //StackPointerArray
-    var stacLocation = stackLocation.getAttribute("id");
-    var val = stackLocation.innerHTML.slice(-2);
-    
-    //if there's repeats, cut them out
-    if(stackPointerArr.length>0 && stackPointerArr[stackPointerArr.length-1].k == stacLocation){  
-        stackPointerArr.pop();
-    } 
-    
-    stackPointerArr.push({k: stacLocation, v: val});
-    
-    
-    
-    //u_stackPointerArr
-    
-    var tempArr;
-    if(stackPointerArr.length>1){   
-        
-        
-        //get last changed value (true last changed value is always equal to 0)
-        lastChangedLoc = stackPointerArr[stackPointerArr.length-2].k;
-        
-        //times vale is seen in stackPointerArr
-        var timesSeen = 0;
-        
-        //indexes last changed value is seen
-        var indexes = [];
-        
-        //loop through stackPointerArray
-        for(keyVals in stackPointerArr){
-           
-            //count the amount of times the last changed location is seen
-            if(stackPointerArr[keyVals].k == lastChangedLoc){
-                timesSeen++;
-                indexes.push(keyVals);
-                
-           }
+//Function that edits StackPointerArr array given that the emulator updates debug variables twice per step
+function fixArray(stacLocation){
+    if(stackPointerArr.length>0){
+        if(stackPointerArr[stackPointerArr.length-1] == stacLocation){
+            console.log(stackPointerArr);
+            stackPointerArr.pop();
         }
-        
-        //if the location is unique to stackPointerArray
-        if(timesSeen == 1){
-            
-            //loop through unique stack locations array 
-            for(keys in u_stackPointerArr){
-                
-                //if there are duplicates of the last changed value present, remove them
-                if(u_stackPointerArr[keys].k == stackPointerArr[stackPointerArr.length-2].k){
-                    //u_stackPointerArr.splice(keys,1);
-                }
-        }     
-            //push last element
-            u_stackPointerArr.push(stackPointerArr[stackPointerArr.length-2]);
-            newestVal = u_stackPointerArr[u_stackPointerArr.length-1].k;
-            console.log("newestVal: " + newestVal);
-            
-    } else if (timesSeen > 1){ //else if its not unique  
-        //if(stackPointerArr[indexes[indexes.length-1]].v != )
-        //lol ill do it later
-    }
-        
+        stackPointerArr.push(stacLocation);
+    }else{
+        stackPointerArr.push(stacLocation);
         
     }
-    
-   
 }
 
 //Create stack values

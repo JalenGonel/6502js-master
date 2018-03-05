@@ -220,7 +220,7 @@ textarea {
     background-color: yellow;
 }
 
-.lastChangedValue{
+.lastStackPointerLocation{
     color: red;
 }
 
@@ -244,4 +244,3 @@ textarea {
 .white {
   background: white;
 }
-
