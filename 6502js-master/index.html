@@ -59,7 +59,7 @@ secondloop:
         <label for="start">Start: $</label>
         <input type="text" value="0100" class="start" name="start" />
         <label for="length">Length: $</label>
-        <input type="text" value="100" class="length" name="length" />
+        <input type="text" value="ff" class="length" name="length" />
         </div>
          <div class="disassembly"><pre><code></code></pre></div> 
       </div>
@@ -67,38 +67,11 @@ secondloop:
       <div class="messages"><pre><code></code></pre></div>
         
         
-      <div class="notes" style="display: none">Notes:
-
-Memory location $fe contains a new random byte on every instruction.
-Memory location $ff contains the ascii code of the last key pressed.
-
-Memory locations $200 to $5ff map to the screen pixels. Different values will
-draw different colour pixels. The colours are:
-
-$0: Black
-$1: White
-$2: Red
-$3: Cyan
-$4: Purple
-$5: Green
-$6: Blue
-$7: Yellow
-$8: Orange
-$9: Brown
-$a: Light red
-$b: Dark grey
-$c: Grey
-$d: Light green
-$e: Light blue
-$f: Light grey
-    </div>
+<div class="monitor"><pre><code></code></pre></div>
         
-    <div style="height:30px;overflow-y:auto;" id="container" class="scrollable">Notes</div>
-
+<div class="skilldrick"></div>
         
-
-    <input type="button" value="VisArray" onclick= "console.log(visString);scrollable();" />
-
+    
     <script src="es5-shim.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="assembler.js"></script>
