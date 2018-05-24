@@ -1641,7 +1641,7 @@ function SimulatorWidget(node) {
         if (start >= 0 && length > 0) {
             
           //Show raw memory in window below screen
-          $node.find('.skilldrick').html(memory.format(start, length));
+          $node.find('.skilldrick').html("\n" + memory.format(start, length));
             
 //            //my code
 //            memory.format(start, length); 
@@ -2862,7 +2862,7 @@ function updateStack(){
 function monitorArray(stringValue){
     var arr = stringValue.split(" "); //split single string into array elements separated by spaced
     var stackString = "";
-    var hexVal = arr[0].slice(0,4);
+    var hexVal = arr[0].slice(2,4); //fixed slicing
     
     
     for(var i = 0; i<arr.length;i++){
@@ -2885,6 +2885,8 @@ function monitorArray(stringValue){
             var spanTagFilled = "<span " + " class= " + "'FilledStackSlots'" + "id= " + hexVal.slice(-2)  + ">";
             
             var spanTagEnd = "</span>";
+            
+            console.log("spantagEmpty:" +spanTagEmpty+ " | hexVal" + hexVal);
             
             //gray out when value is unchanged
             if(arr[i] === "00"){
